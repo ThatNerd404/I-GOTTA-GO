@@ -1,5 +1,6 @@
-import pygame,sys
+import pygame
 from pygame.locals import *
+import sys
 
 def main():
     #? setup pygame
@@ -17,8 +18,13 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
     
-    #? set up for moving the player
-    player_pos = pygame.Vector2(Window_Width / 2, Window_Height / 2)
+    
+    
+     #? load player and resize
+    snowman_player = pygame.image.load("Assets\Img\THE_SNOWMAN.png").convert_alpha() #* apparently adding convert_alpha makes the framerate go up ¯\_(ツ)_/¯
+    snowman_player = pygame.transform.scale(snowman_player, (128,128))
+    Player_Rect = snowman_player.get_frect(topleft= (0,592))
+    
     #? event loop
     Game_Running = True
     while Game_Running:
@@ -29,22 +35,17 @@ def main():
         #? wipes away last frame
         screen.fill('royal blue1')
         
-        #? load player and resize
-        snowman_player = pygame.image.load("Assets\Img\THE_SNOWMAN.png").convert_alpha() #* apparently adding convert_alpha makes the framerate go up ¯\_(ツ)_/¯
-        snowman_player = pygame.transform.scale(snowman_player, (128,128))
-        
         #? place player on screen and controls
-        screen.blit(snowman_player, player_pos)
+        screen.blit(snowman_player, Player_Rect)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP] or keys[pygame.K_SPACE]: #* Decreasing y moves you up and Increasing y moves you down 
-            player_pos.y -= 600 * dt
+            Player_Rect.y -= 600 * dt
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            player_pos.y += 600 * dt
+            Player_Rect.y += 600 * dt
         if keys[pygame.K_a] or keys[pygame.K_LEFT]: #* Decreasing x moves you left and Increasing x moves you right
-            player_pos.x -= 600 * dt
+            Player_Rect.x -= 600 * dt
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            player_pos.x += 600 * dt
-            
+            Player_Rect.x += 600 * dt
 
         pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
         
