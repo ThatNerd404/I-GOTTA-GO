@@ -11,7 +11,7 @@ def main():
     pygame.display.set_caption("Summer In December!!!")
     pygame.display.set_icon(snowman_icon)
     display_surface = pygame.display.set_mode((Window_Width, Window_Height))
-    display_surface.fill('light blue') 
+    display_surface.fill('royal blue1') 
     
     #? setting time for the framerate
     clock = pygame.time.Clock()
@@ -27,10 +27,12 @@ def main():
                 Game_Running = False   
         
         #? wipes away last frame
-        display_surface.fill('light blue')
+        display_surface.fill('royal blue1')
         
         #? draw player on screen
-        pygame.draw.circle(display_surface, "red", player_pos, 40)
+        snowman_player = pygame.image.load("Assets\Img\THE_SNOWMAN.png")
+        snowman_player = pygame.transform.scale(snowman_player, (128,128))
+        display_surface.blit(snowman_player, player_pos)
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
@@ -41,14 +43,17 @@ def main():
             player_pos.x -= 600 * dt
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             player_pos.x += 600 * dt
+            
 
         pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
         
         #? limits the frame rate to 60
+        
         dt = clock.tick(60) / 1000
+        
 
     #? closes game properly
     pygame.quit()
-
+    sys.exit()
 if __name__ == "__main__":
     main()
