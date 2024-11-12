@@ -17,7 +17,6 @@ class Game:
         
         #? setting time for the framerate
         self.clock = pygame.time.Clock()
-        dt = 0
         
         self.Game_Running = True
         
