@@ -1,13 +1,14 @@
 import pygame
 from pygame.locals import *
 import sys
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups):
         
         #? setup player sprite and speed and what not
         super().__init__(groups)
         self.image = pygame.image.load("Assets\Img\Player_Snowman.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (128,128))
+        self.image = pygame.transform.scale(self.image, (96,96))
         Window_Width, Window_Height = 1280, 720
         self.rect =  self.image.get_frect(center = (Window_Width / 2, Window_Height / 2))
         self.Player_Direction = pygame.math.Vector2(0,0)
@@ -20,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         
     def update(self, dt):
         
-        self.Player_Speed = 300
+        self.Player_Speed = 800
         
         #? get the keys that are being pressed 
         Movement_keys = pygame.key.get_pressed()
@@ -52,10 +53,15 @@ class Snowball(pygame.sprite.Sprite):
     def __init__(self,surf,pos,groups):
         super().__init__(groups)
         self.image = surf
+        self.image = pygame.transform.scale(self.image, (12,12))
         self.rect = self.image.get_frect(midleft = pos)
         
     def update(self,dt):
-            self.rect.centerx += 400 * dt
+        self.rect.centerx += 400 * dt
+        
+        #? destroys itself if it leaves the screen
+        if self.rect.right > 1280:
+            self.kill()    
 
 #? setup pygame
 pygame.init()
