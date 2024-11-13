@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.image.load("Assets\Img\Player_Snowman.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (96,96))
-        Window_Width, Window_Height = 1024, 768
+        Window_Width, Window_Height = 1280, 768
         self.rect =  self.image.get_frect(center = (Window_Width / 2, Window_Height / 2))
         self.Player_Direction = pygame.math.Vector2(0,0)
         
@@ -69,7 +69,7 @@ class Snowball(pygame.sprite.Sprite):
 
 #? setup pygame
 pygame.init()
-Window_Width, Window_Height = 1024, 768
+Window_Width, Window_Height = 1280, 768
 
 #? screen size and screen image and junk 
 snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
@@ -93,7 +93,7 @@ title_card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
 title_card = pygame.transform.scale(title_card,(768,768))
 title_card_rect  = title_card.get_frect(center = (Window_Width / 2, Window_Height / 2))
 
-title_card2 = pygame.image.load("Assets\Img\Title_Card4.png").convert_alpha()
+title_card2 = pygame.image.load("Assets\Img\Title_Card2.png").convert_alpha()
 title_card2 = pygame.transform.scale(title_card2,(768,768))
 title_card_rect2  = title_card2.get_frect(center = (Window_Width / 2, Window_Height / 2))
 
@@ -124,7 +124,8 @@ while On_Main_Menu:
         
     for event in pygame.event.get():
         if event.type == QUIT:
-            On_Main_Menu = False   
+            pygame.quit()
+            sys.exit()   
         elif event.type == pygame.KEYDOWN:
             On_Main_Menu = False
         
