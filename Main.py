@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.image.load("Assets\Img\Player_Snowman.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (96,96))
-        Window_Width, Window_Height = 1280, 720
+        Window_Width, Window_Height = 1024, 768
         self.rect =  self.image.get_frect(center = (Window_Width / 2, Window_Height / 2))
         self.Player_Direction = pygame.math.Vector2(0,0)
         
@@ -65,7 +65,7 @@ class Snowball(pygame.sprite.Sprite):
 
 #? setup pygame
 pygame.init()
-Window_Width, Window_Height = 1280, 720
+Window_Width, Window_Height = 1024, 768
 
 #? screen size and screen image and junk 
 snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
@@ -84,6 +84,9 @@ all_sprites = pygame.sprite.Group()
 player = Player(all_sprites)
 
 Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
+title_card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
+title_card = pygame.transform.scale(title_card,(768,768))
+title_card_rect  = title_card.get_frect(center = (Window_Width / 2, Window_Height / 2))
 
 while On_Main_Menu:
     #? limits the frame rate to 60
@@ -94,8 +97,10 @@ while On_Main_Menu:
             On_Main_Menu = False   
         elif event.type == pygame.KEYDOWN:
             On_Main_Menu = False
+            
+    screen.fill("#639bff")
     
-    screen.fill('red')
+    screen.blit(title_card, title_card_rect)
     pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
     
     
@@ -112,7 +117,7 @@ while Game_Running:
     all_sprites.update(dt)  
     
     #? wipes away last frame
-    screen.fill('royal blue1')
+    screen.fill('#639bff')
     all_sprites.draw(screen)
     pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
             
