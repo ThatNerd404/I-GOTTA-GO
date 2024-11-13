@@ -75,19 +75,34 @@ screen = pygame.display.set_mode((Window_Width, Window_Height))
         
 #? setting time for the framerate
 clock = pygame.time.Clock()
+On_Main_Menu = True
 Game_Running = True
+
         
 #? setting up groups
 all_sprites = pygame.sprite.Group()
 player = Player(all_sprites)
-        
+
 Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
 
-
-#? event loop
+while On_Main_Menu:
+    #? limits the frame rate to 60
+    dt = clock.tick(60) / 1000
+        
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            On_Main_Menu = False   
+        elif event.type == pygame.KEYDOWN:
+            On_Main_Menu = False
+    
+    screen.fill('red')
+    pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
+    
+    
+#? Main Game loop
 while Game_Running:
         
-        #? limits the frame rate to 60
+    #? limits the frame rate to 60
     dt = clock.tick(60) / 1000
         
     for event in pygame.event.get():
