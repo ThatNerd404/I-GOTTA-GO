@@ -84,23 +84,48 @@ all_sprites = pygame.sprite.Group()
 player = Player(all_sprites)
 
 Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
+
 title_card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
 title_card = pygame.transform.scale(title_card,(768,768))
 title_card_rect  = title_card.get_frect(center = (Window_Width / 2, Window_Height / 2))
 
+title_card2 = pygame.image.load("Assets\Img\Title_Card4.png").convert_alpha()
+title_card2 = pygame.transform.scale(title_card2,(768,768))
+title_card_rect2  = title_card2.get_frect(center = (Window_Width / 2, Window_Height / 2))
+
+display_interval = 400  # 1 second interval for switching cards
+last_switch_time = pygame.time.get_ticks()
+show_title_card_2 = False
+
+
 while On_Main_Menu:
     #? limits the frame rate to 60
     dt = clock.tick(60) / 1000
+    screen.fill("#639bff")
+    
+     # Check if it's time to switch the displayed image
+    screen.blit(title_card, title_card_rect)
+    
+    current_time = pygame.time.get_ticks()
+    if current_time - last_switch_time >= display_interval:
+        show_title_card_2 = not show_title_card_2  # Toggle title card
+        last_switch_time = current_time
+
+    # Draw the appropriate title card
+    if show_title_card_2:
+        screen.blit(title_card2, title_card_rect2)
+    else:
+       
+        screen.blit(title_card, title_card_rect)  
         
     for event in pygame.event.get():
         if event.type == QUIT:
             On_Main_Menu = False   
         elif event.type == pygame.KEYDOWN:
             On_Main_Menu = False
+        
+
             
-    screen.fill("#639bff")
-    
-    screen.blit(title_card, title_card_rect)
     pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
     
     
