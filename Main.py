@@ -13,6 +13,9 @@ class Player(pygame.sprite.Sprite):
         self.rect =  self.image.get_frect(center = (Window_Width / 2, Window_Height / 2))
         self.Player_Direction = pygame.math.Vector2(0,0)
         
+        #? mask 
+        self.mask = pygame.mask.from_surface(self.image)
+        
         #? setup cooldown on snowball launcher
         self.can_shoot = True
         self.snowball_shoot_time = 0
@@ -38,10 +41,7 @@ class Player(pygame.sprite.Sprite):
             self.snowball_shoot_time = pygame.time.get_ticks()
                
         self.snowball_timer()
-        
-        
-        
-             
+                
     def snowball_timer(self): 
         if self.can_shoot == False:
             current_time = pygame.time.get_ticks()
@@ -52,9 +52,13 @@ class Snowball(pygame.sprite.Sprite):
     
     def __init__(self,surf,pos,groups):
         super().__init__(groups)
+        
         self.image = surf
         self.image = pygame.transform.scale(self.image, (12,12))
         self.rect = self.image.get_frect(midleft = pos)
+        
+        #? mask 
+        self.mask = pygame.mask.from_surface(self.image)
         
     def update(self,dt):
         self.rect.centerx += 400 * dt
