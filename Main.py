@@ -4,7 +4,6 @@ import sys
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups):
-        
         #? setup player sprite and speed and what not
         super().__init__(groups)
         self.image = pygame.image.load("Assets\Img\Player_Snowman.png").convert_alpha()
@@ -36,7 +35,7 @@ class Player(pygame.sprite.Sprite):
         
         Shooting_keys = pygame.key.get_just_pressed()
         if Shooting_keys[pygame.K_q] and self.can_shoot:
-            Snowball(Snowball_Surf, self.rect.midright, all_sprites)
+            Snowball(Snowball_Surf, self.rect.midright, (all_sprites, snowball_sprites))
             self.can_shoot = False
             self.snowball_shoot_time = pygame.time.get_ticks()
                
@@ -47,7 +46,6 @@ class Player(pygame.sprite.Sprite):
             current_time = pygame.time.get_ticks()
             if current_time - self.snowball_shoot_time >= self.cooldown_duration:
                 self.can_shoot = True
-
 class Snowball(pygame.sprite.Sprite):
     
     def __init__(self,surf,pos,groups):
@@ -66,7 +64,16 @@ class Snowball(pygame.sprite.Sprite):
         #? destroys itself if it leaves the screen
         if self.rect.right > 1280:
             self.kill()    
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self,surf, pos, groups):
+        super().__init__(groups)
+        self.image = surf
+        self.image = pygame.transform.scale(self.image, (96,96))
+        self.rect =  self.image.get_frect(center = pos)
 
+def collisions():
+    pass 
+ 
 #? setup pygame
 pygame.init()
 Window_Width, Window_Height = 1280, 768
@@ -76,6 +83,8 @@ snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
 pygame.display.set_caption("Summer In December!!!")
 pygame.display.set_icon(snowman_icon)
 screen = pygame.display.set_mode((Window_Width, Window_Height))
+Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
+Enemy_Surf = pygame.image.load("Assets\Img\Placeholder.png")
         
 #? setting time for the framerate
 clock = pygame.time.Clock()
@@ -86,14 +95,14 @@ Game_Running = True
         
 #? setting up groups
 all_sprites = pygame.sprite.Group()
-player = Player(all_sprites)
-
-Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
-
-
+enemy_sprites = pygame.sprite.Group()
+snowball_sprites = pygame.sprite.Group()
+player_sprite = Player(all_sprites)
+red_box_sprite = Enemy(Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
 
 def title_menu():
     global On_Title_Card
+    
     title_card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
     title_card = pygame.transform.scale(title_card,(768,768))
     title_card_rect  = title_card.get_frect(center = (Window_Width / 2, Window_Height / 2))
@@ -147,7 +156,13 @@ while Game_Running:
         if event.type == QUIT:
             Game_Running = False   
     
+    #? updating the screen
     all_sprites.update(dt)  
+    collision_sprites = pygame.sprite.spritecollide(player_sprite, enemy_sprites, False)
+    
+    #? for each snowball if the snowball collides with an enemy sprite kill it
+    for snowball in snowball_sprites:
+        pygame.sprite.spritecollide(snowball, enemy_sprites, True)
     
     #? wipes away last frame
     screen.fill('#639bff')
