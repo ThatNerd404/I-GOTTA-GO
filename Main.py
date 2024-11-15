@@ -71,35 +71,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (96,96))
         self.rect =  self.image.get_frect(center = pos)
 
-def collisions():
-    pass 
  
-#? setup pygame
-pygame.init()
-Window_Width, Window_Height = 1280, 768
-
-#? screen size and screen image and junk 
-snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
-pygame.display.set_caption("Summer In December!!!")
-pygame.display.set_icon(snowman_icon)
-screen = pygame.display.set_mode((Window_Width, Window_Height))
-Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
-Enemy_Surf = pygame.image.load("Assets\Img\Placeholder.png")
-        
-#? setting time for the framerate
-clock = pygame.time.Clock()
-
-On_Title_Card = True
-Game_Running = True
-
-        
-#? setting up groups
-all_sprites = pygame.sprite.Group()
-enemy_sprites = pygame.sprite.Group()
-snowball_sprites = pygame.sprite.Group()
-player_sprite = Player(all_sprites)
-red_box_sprite = Enemy(Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
-
 def title_menu():
     global On_Title_Card
     
@@ -122,7 +94,7 @@ def title_menu():
     
          # Check if it's time to switch the displayed image
         screen.blit(title_card, title_card_rect)
-    
+
         current_time = pygame.time.get_ticks()
         if current_time - last_switch_time >= display_interval:
             show_title_card_2 = not show_title_card_2  # Toggle title card
@@ -143,8 +115,72 @@ def title_menu():
         
 
         pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
+
+def pause_menu():
+    dt = clock.tick(60) / 1000
+    global Game_Paused
+    Paused_Card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
+    Paused_Card = pygame.transform.scale(Paused_Card,(768,768))
+    Paused_Card_rect  = Paused_Card.get_frect(center = (Window_Width / 2, Window_Height / 2))
     
     
+    
+    while Game_Paused:
+
+        
+        font = pygame.font.Font("Assets\Fonts\\alagard.ttf", 75)
+        text = font.render("PAUSED", None, (255, 255, 255))  
+        text_rect = text.get_rect(center=(Window_Width // 2, Window_Height // 2))
+        screen.blit(text, text_rect)
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()   
+            elif event.type == KEYDOWN:
+                if pygame.key.get_pressed()[pygame.K_p]:
+                    Game_Paused = False
+            
+        pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
+        
+def collisions():
+    global Game_Running
+    player_dies = pygame.sprite.spritecollide(player_sprite, enemy_sprites, False)
+    
+    if player_dies:
+        Game_Running = False
+    #? for each snowball if the snowball collides with an enemy sprite kill it
+    for snowball in snowball_sprites:
+       collided_sprites =  pygame.sprite.spritecollide(snowball, enemy_sprites, True)
+       if collided_sprites:
+           snowball.kill()
+
+#? setup pygame
+pygame.init()
+Window_Width, Window_Height = 1280, 768
+
+#? screen size and screen image and junk 
+snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
+pygame.display.set_caption("Summer In December!!!")
+pygame.display.set_icon(snowman_icon)
+screen = pygame.display.set_mode((Window_Width, Window_Height), pygame.SRCALPHA)
+Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
+Enemy_Surf = pygame.image.load("Assets\Img\Placeholder.png")
+        
+#? setting time for the framerate
+clock = pygame.time.Clock()
+
+On_Title_Card = True
+Game_Running = True
+Game_Paused = False
+    
+#? setting up groups
+all_sprites = pygame.sprite.Group()
+enemy_sprites = pygame.sprite.Group()
+snowball_sprites = pygame.sprite.Group()
+player_sprite = Player(all_sprites)
+red_box_sprite = Enemy(Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
+
 #? Main Game loop
 while Game_Running:
     title_menu()
@@ -155,14 +191,14 @@ while Game_Running:
     for event in pygame.event.get():
         if event.type == QUIT:
             Game_Running = False   
-    
+        elif event.type == KEYDOWN:
+            if pygame.key.get_pressed()[pygame.K_p]:
+                Game_Paused = not Game_Paused
+                pause_menu()
+            
     #? updating the screen
     all_sprites.update(dt)  
-    collision_sprites = pygame.sprite.spritecollide(player_sprite, enemy_sprites, False)
-    
-    #? for each snowball if the snowball collides with an enemy sprite kill it
-    for snowball in snowball_sprites:
-        pygame.sprite.spritecollide(snowball, enemy_sprites, True)
+    collisions()
     
     #? wipes away last frame
     screen.fill('#639bff')
