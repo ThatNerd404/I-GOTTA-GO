@@ -12,9 +12,6 @@ class Player(pygame.sprite.Sprite):
         self.rect =  self.image.get_frect(center = (Window_Width / 2, Window_Height / 2))
         self.Player_Direction = pygame.math.Vector2(0,0)
         
-        #? mask 
-        self.mask = pygame.mask.from_surface(self.image)
-        
         #? setup cooldown on snowball launcher
         self.can_shoot = True
         self.snowball_shoot_time = 0
@@ -55,8 +52,6 @@ class Snowball(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (12,12))
         self.rect = self.image.get_frect(midleft = pos)
         
-        #? mask 
-        self.mask = pygame.mask.from_surface(self.image)
         
     def update(self,dt):
         self.rect.centerx += 400 * dt
@@ -70,7 +65,6 @@ class Enemy(pygame.sprite.Sprite):
         self.image = surf
         self.image = pygame.transform.scale(self.image, (96,96))
         self.rect =  self.image.get_frect(center = pos)
-
  
 def title_menu():
     global On_Title_Card
@@ -119,14 +113,12 @@ def title_menu():
 def pause_menu():
     dt = clock.tick(60) / 1000
     global Game_Paused
-    Paused_Card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
+    """Paused_Card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
     Paused_Card = pygame.transform.scale(Paused_Card,(768,768))
     Paused_Card_rect  = Paused_Card.get_frect(center = (Window_Width / 2, Window_Height / 2))
-    
-    
-    
-    while Game_Paused:
+    """
 
+    while Game_Paused:
         
         font = pygame.font.Font("Assets\Fonts\\alagard.ttf", 75)
         text = font.render("PAUSED", None, (255, 255, 255))  
@@ -145,7 +137,7 @@ def pause_menu():
         
 def collisions():
     global Game_Running
-    player_dies = pygame.sprite.spritecollide(player_sprite, enemy_sprites, False)
+    player_dies = pygame.sprite.spritecollide(player_sprite, enemy_sprites, False, pygame.sprite.collide_mask)
     
     if player_dies:
         Game_Running = False
@@ -164,6 +156,8 @@ snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
 pygame.display.set_caption("Summer In December!!!")
 pygame.display.set_icon(snowman_icon)
 screen = pygame.display.set_mode((Window_Width, Window_Height), pygame.SRCALPHA)
+
+#? importing surface images
 Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
 Enemy_Surf = pygame.image.load("Assets\Img\Placeholder.png")
         
