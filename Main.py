@@ -135,12 +135,6 @@ def pause_menu():
             
         pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
 
-def play_sound(sound):
-    pygame.mixer.init()
-    pygame.mixer.music.set_endevent(pygame.USEREVENT)
-    pygame.mixer.music.load(sound)
-    pygame.mixer.music.play()  
-          
 def collisions():
     global Game_Running
     player_dies = pygame.sprite.spritecollide(player_sprite, enemy_sprites, False, pygame.sprite.collide_mask)
@@ -151,7 +145,7 @@ def collisions():
     for snowball in snowball_sprites:
        snowball_hits_enemy =  pygame.sprite.spritecollide(snowball, enemy_sprites, True, pygame.sprite.collide_mask)
        if snowball_hits_enemy:
-           play_sound("Assets\Sound\Snowball_Sound_Effect.mp3")
+           Snowball_Sound_Effect.play()
            snowball.kill()
            
 
@@ -168,7 +162,8 @@ screen = pygame.display.set_mode((Window_Width, Window_Height), pygame.SRCALPHA)
 #? importing surface images
 Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
 Enemy_Surf = pygame.image.load("Assets\Img\Enemy_Flamingo.png")
-        
+Snowball_Sound_Effect = pygame.mixer.Sound("Assets\Sound\Snowball_Sound_Effect.mp3")
+       
 #? setting time for the framerate
 clock = pygame.time.Clock()
 
