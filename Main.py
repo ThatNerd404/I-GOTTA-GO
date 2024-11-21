@@ -27,7 +27,7 @@ class Game():
         #? setting up groups
         
         self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites)
-        self.flamingo_sprite = Enemy(Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
+        self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
 
     
     def run(self):
