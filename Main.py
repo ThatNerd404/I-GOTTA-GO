@@ -24,13 +24,13 @@ class Game():
         pygame.display.set_icon(snowman_icon)
         self.clock = pygame.time.Clock()
 
-        #? setting up groups
-        
+        #? setting up sprites
         self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites)
         self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
 
     
     def run(self):
+        #? Main Game Loop
         while self.Game_Running:
             
             self.title_menu()
@@ -38,7 +38,8 @@ class Game():
         
             #? limits the frame rate to 60
             dt = self.clock.tick(60) / 1000
-        
+
+            #? check for exiting and check for pausing
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.Game_Running = False   
@@ -51,18 +52,18 @@ class Game():
             all_sprites.update(dt)  
             self.collisions()
     
-    #? wipes away last frame
+            #? wipes away last frame
             self.screen.fill('#639bff')
             all_sprites.draw(self.screen)
             pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
     
     def collisions(self):
-    
+        
         player_dies = pygame.sprite.spritecollide(self.player_sprite, enemy_sprites, False, pygame.sprite.collide_mask)
-    
+        #? if you die the game ends no shit
         if player_dies:
             self.Game_Running = False
-         #? for each snowball if the snowball collides with an enemy sprite kill it
+        #? for each snowball if the snowball collides with an enemy sprite kill it
         for snowball in snowball_sprites:
             snowball_hits_enemy =  pygame.sprite.spritecollide(snowball, enemy_sprites, True, pygame.sprite.collide_mask)
             if snowball_hits_enemy:
