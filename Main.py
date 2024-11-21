@@ -10,7 +10,7 @@ class Game():
     def __init__(self):
         #? setup pygame
         pygame.init()
-        pygame.mixer.init()
+        
         #? Main Loop Variables
         self.On_Title_Card = True
         self.Game_Paused = False
