@@ -4,8 +4,8 @@ import sys
 from Settings import *
 from Enemy import Enemy
 from Player import Player_Character
+from Game_Logic import *
 
-         
 class Game():
     def __init__(self):
         #? setup pygame
@@ -25,9 +25,9 @@ class Game():
         self.clock = pygame.time.Clock()
 
         #? setting up sprites
-        self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites)
-        self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
-
+        self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites, collision_sprites)
+        #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
+        CollisionSprites((1000, 384),(50,50), (all_sprites, collision_sprites))
     
     def run(self):
         #? Main Game Loop
