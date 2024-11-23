@@ -1,6 +1,6 @@
 import pygame
 Window_Width, Window_Height = 1280, 768
-Tile_Size = 64
+Tile_Size = 32
 #? importing 
 Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
 Flamingo_Enemy_Surf = pygame.image.load("Assets\Img\Enemy_Flamingo.png")  
