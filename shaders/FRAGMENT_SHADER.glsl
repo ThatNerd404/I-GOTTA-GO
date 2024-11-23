@@ -11,7 +11,7 @@ void main() {
   }
   else{
     float flatness = 1.0;
-    if (mode == 1)flatness = 4.7; // use this to change how round it is
+    if (mode == 1)flatness = 7.0; // use this to change how round it is
     else if(mode == 2)flatness = 10.0;
     vec2 center = vec2(0.5, 0.5);
     vec2 off_center = v_text - center;
