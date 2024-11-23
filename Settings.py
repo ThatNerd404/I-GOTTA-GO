@@ -1,5 +1,5 @@
 import pygame
-Window_Width, Window_Height = 1280, 768
+Window_Width, Window_Height = 800, 600
 Tile_Size = 32
 #? importing 
 Snowball_Surf = pygame.image.load("Assets\Img\Snowball_Projectile.png")
@@ -10,3 +10,6 @@ all_sprites = pygame.sprite.Group()
 enemy_sprites = pygame.sprite.Group()
 collision_sprites = pygame.sprite.Group()
 snowball_sprites = pygame.sprite.Group()
+
+VIRTUAL_RES = (800, 600)
+REAL_RES=(1280, 768)

@@ -1,10 +1,14 @@
 import pygame
 from pygame.locals import *
 import sys
+from crt_shader import Graphic_engine
+
 from Settings import *
 from Enemy import Enemy
 from Player import Player_Character
 from Game_Logic import *
+
+
 
 class Game():
     def __init__(self):
@@ -18,7 +22,13 @@ class Game():
         
         
         #? screen size and screen image and junk 
-        self.screen = pygame.display.set_mode((Window_Width, Window_Height), pygame.SRCALPHA)
+        #*self.screen = pygame.display.set_mode((Window_Width, Window_Height), pygame.SRCALPHA)
+        self.screen = pygame.Surface(VIRTUAL_RES).convert((255, 65282, 16711681, 0))
+        # you need to give your display OPENGL flag to blit screen using OPENGL
+        self.real_screen = pygame.display.set_mode(REAL_RES, DOUBLEBUF|OPENGL)
+
+        # init shader class
+        self.crt_shader =  Graphic_engine(self.screen)
         snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
         pygame.display.set_caption("Summer In December!!!")
         pygame.display.set_icon(snowman_icon)
@@ -27,7 +37,7 @@ class Game():
         #? setting up sprites
         self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites, collision_sprites)
         #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
-        CollisionSprites((1000, 384),(50,50), (all_sprites, collision_sprites))
+        CollisionSprites((500, 400),(50,50), (all_sprites, collision_sprites))
     
     def run(self):
         #? Main Game Loop
@@ -55,7 +65,9 @@ class Game():
             #? wipes away last frame
             self.screen.fill('#639bff')
             all_sprites.draw(self.screen)
-            pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
+            #! rememeber use self.crt_shader not pygame.display.update()
+            #! treat window like it is in 800 by 600 display (even though its not)
+            self.crt_shader()
     
     def collisions(self):
         
@@ -72,11 +84,11 @@ class Game():
                 
     def title_menu(self):
         title_card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
-        title_card = pygame.transform.scale(title_card,(768,768))
+        title_card = pygame.transform.scale(title_card,(800,600))
         title_card_rect  = title_card.get_frect(center = (Window_Width / 2, Window_Height / 2))
 
         title_card2 = pygame.image.load("Assets\Img\Title_Card2.png").convert_alpha()
-        title_card2 = pygame.transform.scale(title_card2,(768,768))
+        title_card2 = pygame.transform.scale(title_card2,(800,600))
         title_card_rect2  = title_card2.get_frect(center = (Window_Width / 2, Window_Height / 2))
 
         display_interval = 400  # 1 second interval for switching cards
@@ -110,7 +122,7 @@ class Game():
                     self.On_Title_Card = False
         
 
-            pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
+            self.crt_shader() #* or .flip as flip does only a part of the display while .update does the entire display
     
     def pause_menu(self):
         dt = self.clock.tick(60) / 1000
@@ -129,7 +141,7 @@ class Game():
                     if pygame.key.get_pressed()[pygame.K_p]:
                         self.Game_Paused = False
             
-            pygame.display.update() #* or .flip as flip does only a part of the display while .update does the entire display
+            self.crt_shader() #* or .flip as flip does only a part of the display while .update does the entire display
 
     """Paused_Card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
     Paused_Card = pygame.transform.scale(Paused_Card,(768,768))
