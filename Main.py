@@ -22,12 +22,12 @@ class Game():
         
         
         #? screen size and screen image and junk 
-        #*self.screen = pygame.display.set_mode((Window_Width, Window_Height), pygame.SRCALPHA)
         self.screen = pygame.Surface(VIRTUAL_RES).convert((255, 65282, 16711681, 0))
-        # you need to give your display OPENGL flag to blit screen using OPENGL
-        self.real_screen = pygame.display.set_mode(REAL_RES, DOUBLEBUF|OPENGL)
+        
+        #? you need to give your display OPENGL flag to blit screen using OPENGL
+        pygame.display.set_mode(REAL_RES, DOUBLEBUF|OPENGL)
 
-        # init shader class
+        #? init shader class
         self.crt_shader =  Graphic_engine(self.screen)
         snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
         pygame.display.set_caption("Summer In December!!!")
