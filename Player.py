@@ -10,7 +10,7 @@ class Player_Character(pygame.sprite.Sprite):
         self.image = pygame.image.load("Assets\Img\Player_Snowman.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (64,64))
         self.rect =  self.image.get_frect(center = pos)
-        self.hitbox = self.rect.inflate(-15,-10)
+        self.hitbox = self.rect.inflate(-15,0)
         self.Player_Direction = pygame.math.Vector2(0,0)
         
         #? setup cooldown on snowball launcher

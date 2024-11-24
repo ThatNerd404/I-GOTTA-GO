@@ -21,13 +21,18 @@ class Game():
         self.Game_Paused = False
         self.Game_Running = True
         
-        self.setup('Assets\Maps\Level_1.tmx')
+       
+        
+        #? you need to give your display OPENGL flag to blit screen using OPENGL 
+        #! set mode comes first asshole
+        pygame.display.set_mode(REAL_RES, DOUBLEBUF|OPENGL)
+        
         #? screen size and screen image and junk 
         self.screen = pygame.Surface(VIRTUAL_RES).convert((255, 65282, 16711681, 0)) #! no clue what the .convert does but when removed it doesn't work so...
         
-        #? you need to give your display OPENGL flag to blit screen using OPENGL
-        pygame.display.set_mode(REAL_RES, DOUBLEBUF|OPENGL)
-
+        #? setting up first level
+        self.setup('Assets\Maps\Level_1.tmx')
+        
         #? init shader class
         self.crt_shader =  Graphic_engine(self.screen)
         snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
@@ -36,12 +41,19 @@ class Game():
         self.clock = pygame.time.Clock()
 
         #? setting up sprites
+        
+        
         self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites, collision_sprites)
         #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(300, 500), (all_sprites, enemy_sprites))
-        CollisionSprites((500, 400),(50,50), (all_sprites, collision_sprites))
-    def setup(self,map_link):
         
+    def setup(self,map_link):
         map = load_pygame(map_link)
+        for obj in map.get_layer_by_name('Ground'):
+            obj.x, obj.y = int(obj.x), int(obj.y)
+            obj.width, obj.height = int(obj.width), int(obj.height)
+            CollisionSprites((obj.x, obj.y), pygame.Surface((obj.width , obj.height)), collision_sprites)
+        for x,y, image in map.get_layer_by_name('Background').tiles():
+            Sprite((x * Tile_Size,y * Tile_Size), image, all_sprites)
     def run(self):
         #? Main Game Loop
         while self.Game_Running:
@@ -143,8 +155,9 @@ class Game():
                 elif event.type == KEYDOWN:
                     if pygame.key.get_pressed()[pygame.K_p]:
                         self.Game_Paused = False
-            
-            self.crt_shader() #* or .flip as flip does only a part of the display while .update does the entire display
+            #*        elif pygame.key.get_pressed()[pygame.K_1]:
+            #*            Crt_On = not Crt_On
+            self.crt_shader() #* add this back later when I figure out how to change a variable in another file
 
     """Paused_Card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
     Paused_Card = pygame.transform.scale(Paused_Card,(768,768))

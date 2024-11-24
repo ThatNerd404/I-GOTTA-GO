@@ -30,9 +30,6 @@
 </data>
  </layer>
  <objectgroup id="3" name="Ground">
-  <object id="1" name="Ground_Collision" x="8" y="550" width="1266" height="52"/>
-  <object id="2" name="Ground_Collions" x="262" y="838" height="4"/>
-  <object id="3" x="1698" y="102"/>
-  <object id="4" x="592" y="1056" height="2"/>
+  <object id="1" name="Ground_Collision" x="8" y="545" width="1266" height="57"/>
  </objectgroup>
 </map>

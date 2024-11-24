@@ -1,7 +1,6 @@
 import struct
 import pygame, os, sys
 from pygame.locals import *
-
 import moderngl
 
 def resource_path(relative):
@@ -34,7 +33,7 @@ class Graphic_engine:
                 fragment_shader=open(resource_path('shaders/FRAGMENT_SHADER.glsl')).read(),
             )
             self.prog['mode'] = self.style #! swap this to 0 to turn off the crt shader and self.style to turn it back on
-
+             
             self.screen_texture = self.ctx.texture(
                 self.VIRTUAL_RES, 3,
                 pygame.image.tostring(screen, "RGB", 1)
