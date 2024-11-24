@@ -8,7 +8,7 @@ from Settings import *
 from Enemy import Enemy
 from Player import Player_Character
 from Game_Logic import *
-
+from Groups import AllSprites
 
 
 class Game():
@@ -30,20 +30,23 @@ class Game():
         #? screen size and screen image and junk 
         self.screen = pygame.Surface(VIRTUAL_RES).convert((255, 65282, 16711681, 0)) #! no clue what the .convert does but when removed it doesn't work so...
         
+        #? setting up sprites
+        self.all_sprites = AllSprites()
+        
+        
         #? setting up first level
         self.setup('Assets\Maps\Level_1.tmx')
         
         #? init shader class
         self.crt_shader =  Graphic_engine(self.screen)
+        
         snowman_icon = pygame.image.load("Assets\Img\icons8-snowman-32.png")
         pygame.display.set_caption("Summer In December!!!")
         pygame.display.set_icon(snowman_icon)
         self.clock = pygame.time.Clock()
 
-        #? setting up sprites
+        self.player_sprite = Player_Character((Window_Width / 2, (Window_Height / 2)),self.all_sprites, collision_sprites)
         
-        
-        self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites, collision_sprites)
         #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(300, 500), (all_sprites, enemy_sprites))
         
     def setup(self,map_link):
@@ -57,7 +60,7 @@ class Game():
         for obj in map.get_layer_by_name('Collision_Layer'):
             CollisionSprites((obj.x, obj.y), pygame.Surface((obj.width , obj.height)), collision_sprites)
         for x,y, image in map.get_layer_by_name('Background').tiles():
-            Sprite((x * Tile_Size,y * Tile_Size), image, all_sprites)
+            Sprite((x * Tile_Size,y * Tile_Size), image, self.all_sprites)
     def run(self):
         #? Main Game Loop
         while self.Game_Running:
@@ -78,12 +81,12 @@ class Game():
                         self.pause_menu()
             
             #? updating the screen
-            all_sprites.update(dt)  
+            self.all_sprites.update(dt)  
             self.collisions()
     
             #? wipes away last frame
-            self.screen.fill('#639bff')
-            all_sprites.draw(self.screen)
+            #self.screen.fill('#639bff')
+            self.all_sprites.draw(self.screen, self.player_sprite.rect.center)
             #! rememeber use self.crt_shader not pygame.display.update()
             #! treat window like it is in 800 by 600 display (even though its not)
             self.crt_shader()
@@ -94,12 +97,13 @@ class Game():
         #? if you die the game ends no shit
         if player_dies:
             self.Game_Running = False
+            
         #? for each snowball if the snowball collides with an enemy sprite kill it
-        for snowball in snowball_sprites:
+        '''for snowball in snowball_sprites:
             snowball_hits_enemy =  pygame.sprite.spritecollide(snowball, enemy_sprites, True, pygame.sprite.collide_mask)
             if snowball_hits_enemy:
                 Snowball_Sound_Effect.play()
-                snowball.kill()   
+                snowball.kill()   '''
                 
     def title_menu(self):
         title_card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()

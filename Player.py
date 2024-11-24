@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from Settings import *
-
+from Groups import AllSprites
 
 class Player_Character(pygame.sprite.Sprite):
     def __init__(self,pos, groups, collision_sprites):
@@ -30,7 +30,7 @@ class Player_Character(pygame.sprite.Sprite):
         
         self.Player_Direction = self.Player_Direction.normalize() if self.Player_Direction else self.Player_Direction #? makes the speed constant when you click 2 buttons at the same time
         Shooting_keys = pygame.key.get_just_pressed()
-        if Shooting_keys[pygame.K_q] and self.can_shoot:
+        '''if Shooting_keys[pygame.K_q] and self.can_shoot:
             Snowball(Snowball_Surf, self.rect.midright, (all_sprites, snowball_sprites))
             self.can_shoot = False
             self.snowball_shoot_time = pygame.time.get_ticks()
@@ -42,7 +42,7 @@ class Player_Character(pygame.sprite.Sprite):
             current_time = pygame.time.get_ticks()
             if current_time - self.snowball_shoot_time >= self.cooldown_duration:
                 self.can_shoot = True
-    
+    '''
     def move(self,dt):
         
         self.hitbox.x += self.Player_Direction.x * self.Player_Speed * dt
@@ -66,7 +66,7 @@ class Player_Character(pygame.sprite.Sprite):
         self.move(dt)
         
     
-class Snowball(pygame.sprite.Sprite):
+'''class Snowball(pygame.sprite.Sprite):
     
     def __init__(self,surf,pos,groups):
         super().__init__(groups)
@@ -81,4 +81,4 @@ class Snowball(pygame.sprite.Sprite):
         
         #? destroys itself if it leaves the screen
         if self.rect.right > 1280:
-            self.kill()    
+            self.kill()    '''
