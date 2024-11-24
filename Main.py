@@ -47,10 +47,14 @@ class Game():
         #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(300, 500), (all_sprites, enemy_sprites))
         
     def setup(self,map_link):
+        
+        #? Load the map and because I have argument and can use this for all the levels
+        #! layer/Object names need to be identical to work properly
+        #! remember to check for random invis objects in tiled
+        
         map = load_pygame(map_link)
-        for obj in map.get_layer_by_name('Ground'):
-            obj.x, obj.y = int(obj.x), int(obj.y)
-            obj.width, obj.height = int(obj.width), int(obj.height)
+        
+        for obj in map.get_layer_by_name('Collision_Layer'):
             CollisionSprites((obj.x, obj.y), pygame.Surface((obj.width , obj.height)), collision_sprites)
         for x,y, image in map.get_layer_by_name('Background').tiles():
             Sprite((x * Tile_Size,y * Tile_Size), image, all_sprites)
@@ -59,7 +63,7 @@ class Game():
         while self.Game_Running:
             
             self.title_menu()
-            '''nvm just use background_music.play(loops= -1) and it will go infinitly don't forget to use .setvolume tho'''
+            #* nvm just use background_music.play(loops= -1) and it will go infinitly don't forget to use .setvolume tho
         
             #? limits the frame rate to 60
             dt = self.clock.tick(60) / 1000

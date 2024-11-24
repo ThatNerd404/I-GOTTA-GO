@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="6">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="10">
  <tileset firstgid="1" source="../Tilesets/Level_1_Tileset.tsx"/>
  <layer id="1" name="Background" width="40" height="24">
   <data encoding="csv">
@@ -29,7 +29,9 @@
 54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51
 </data>
  </layer>
- <objectgroup id="3" name="Ground">
+ <objectgroup id="3" name="Collision_Layer">
   <object id="1" name="Ground_Collision" x="8" y="545" width="1266" height="57"/>
+  <object id="6" name="Left_Border" x="-6" y="12" width="16" height="534"/>
+  <object id="8" name="Right_Border" x="1270" y="20" width="8" height="532"/>
  </objectgroup>
 </map>
