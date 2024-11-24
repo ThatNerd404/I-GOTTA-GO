@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="6">
  <tileset firstgid="1" source="../Tilesets/Level_1_Tileset.tsx"/>
- <layer id="1" name="Tile Layer 1" width="40" height="24">
+ <layer id="1" name="Background" width="40" height="24">
   <data encoding="csv">
 33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,
 33,1,2,3,33,33,33,33,33,33,33,33,33,33,33,33,33,33,4,5,6,33,33,33,33,33,33,33,33,33,33,33,33,33,10,11,12,33,33,33,
@@ -29,4 +29,10 @@
 54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51
 </data>
  </layer>
+ <objectgroup id="3" name="Ground">
+  <object id="1" name="Ground_Collision" x="8" y="550" width="1266" height="52"/>
+  <object id="2" name="Ground_Collions" x="262" y="838" height="4"/>
+  <object id="3" x="1698" y="102"/>
+  <object id="4" x="592" y="1056" height="2"/>
+ </objectgroup>
 </map>

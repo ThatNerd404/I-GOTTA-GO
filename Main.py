@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys
+from pytmx.util_pygame import load_pygame
 from crt_shader import Graphic_engine
 
 from Settings import *
@@ -20,7 +21,7 @@ class Game():
         self.Game_Paused = False
         self.Game_Running = True
         
-        
+        self.setup('Assets\Maps\Level_1.tmx')
         #? screen size and screen image and junk 
         self.screen = pygame.Surface(VIRTUAL_RES).convert((255, 65282, 16711681, 0)) #! no clue what the .convert does but when removed it doesn't work so...
         
@@ -38,7 +39,9 @@ class Game():
         self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites, collision_sprites)
         #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(300, 500), (all_sprites, enemy_sprites))
         CollisionSprites((500, 400),(50,50), (all_sprites, collision_sprites))
-    
+    def setup(self,map_link):
+        
+        map = load_pygame(map_link)
     def run(self):
         #? Main Game Loop
         while self.Game_Running:
