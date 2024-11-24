@@ -22,7 +22,7 @@ class Game():
         
         
         #? screen size and screen image and junk 
-        self.screen = pygame.Surface(VIRTUAL_RES).convert((255, 65282, 16711681, 0))
+        self.screen = pygame.Surface(VIRTUAL_RES).convert((255, 65282, 16711681, 0)) #! no clue what the .convert does but when removed it doesn't work so...
         
         #? you need to give your display OPENGL flag to blit screen using OPENGL
         pygame.display.set_mode(REAL_RES, DOUBLEBUF|OPENGL)
@@ -36,7 +36,7 @@ class Game():
 
         #? setting up sprites
         self.player_sprite = Player_Character((Window_Width / 2, Window_Height / 2), all_sprites, collision_sprites)
-        #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(1000, 384), (all_sprites, enemy_sprites))
+        #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(300, 500), (all_sprites, enemy_sprites))
         CollisionSprites((500, 400),(50,50), (all_sprites, collision_sprites))
     
     def run(self):
