@@ -14,6 +14,8 @@ class Game():
         #? setup pygame
         pygame.init()
         
+        Background_Music.set_volume(10)
+        Background_Music.play(loops= -1) 
         #? Main Loop Variables
         self.On_Title_Card = True
         self.Game_Paused = False
@@ -72,8 +74,7 @@ class Game():
         while self.Game_Running:
             
             self.title_menu()
-            #* nvm just use background_music.play(loops= -1) and it will go infinitly don't forget to use .setvolume tho
-        
+
             #? limits the frame rate to 60
             dt = self.clock.tick(FrameRate) / 1000
 
