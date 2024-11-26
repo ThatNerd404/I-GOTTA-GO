@@ -5,9 +5,7 @@ from pytmx.util_pygame import load_pygame
 from crt_shader import Graphic_engine
 
 from Settings import *
-from Enemy import Enemy
-from Player import Player_Character
-from Game_Logic import *
+from Sprites import *
 from Groups import AllSprites
 
 
@@ -32,6 +30,7 @@ class Game():
         
         #? setting up sprites
         self.all_sprites = AllSprites()
+        self.collision_sprites = pygame.sprite.Group()
         
         
         #? setting up first level
@@ -44,11 +43,13 @@ class Game():
         pygame.display.set_caption("Summer In December!!!")
         pygame.display.set_icon(snowman_icon)
         self.clock = pygame.time.Clock()
-
-        self.player_sprite = Player_Character((Window_Width / 2, (Window_Height / 2)),self.all_sprites, collision_sprites)
         
         #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(300, 500), (all_sprites, enemy_sprites))
-        
+    def load_assest(self):
+         # graphics
+         pass
+         # sounds
+         
     def setup(self,map_link):
         
         #? Load the map and because I have argument and can use this for all the levels
@@ -58,9 +59,14 @@ class Game():
         map = load_pygame(map_link)
         
         for obj in map.get_layer_by_name('Collision_Layer'):
-            CollisionSprites((obj.x, obj.y), pygame.Surface((obj.width , obj.height)), collision_sprites)
+            CollisionSprites((obj.x, obj.y), pygame.Surface((obj.width , obj.height)), self.collision_sprites)
+        
         for x,y, image in map.get_layer_by_name('Background').tiles():
             Sprite((x * Tile_Size,y * Tile_Size), image, self.all_sprites)
+        for obj in map.get_layer_by_name("Entities"):
+            if obj.name == 'Player':
+                self.player = Player_Character((obj.x, obj.y), self.all_sprites, self.collision_sprites)
+            
     def run(self):
         #? Main Game Loop
         while self.Game_Running:
@@ -69,7 +75,7 @@ class Game():
             #* nvm just use background_music.play(loops= -1) and it will go infinitly don't forget to use .setvolume tho
         
             #? limits the frame rate to 60
-            dt = self.clock.tick(60) / 1000
+            dt = self.clock.tick(FrameRate) / 1000
 
             #? check for exiting and check for pausing
             for event in pygame.event.get():
@@ -82,16 +88,16 @@ class Game():
             
             #? updating the screen
             self.all_sprites.update(dt)  
-            self.collisions()
+            #self.collisions()
     
             #? wipes away last frame
-            #self.screen.fill('#639bff')
-            self.all_sprites.draw(self.screen, self.player_sprite.rect.center)
+            self.screen.fill('#639bff')
+            self.all_sprites.draw(self.screen, self.player.rect.center)
             #! rememeber use self.crt_shader not pygame.display.update()
             #! treat window like it is in 800 by 600 display (even though its not)
             self.crt_shader()
     
-    def collisions(self):
+    '''def collisions(self):
         
         player_dies = pygame.sprite.spritecollide(self.player_sprite, enemy_sprites, False, pygame.sprite.collide_mask)
         #? if you die the game ends no shit
@@ -99,7 +105,7 @@ class Game():
             self.Game_Running = False
             
         #? for each snowball if the snowball collides with an enemy sprite kill it
-        '''for snowball in snowball_sprites:
+        ''''''for snowball in snowball_sprites:
             snowball_hits_enemy =  pygame.sprite.spritecollide(snowball, enemy_sprites, True, pygame.sprite.collide_mask)
             if snowball_hits_enemy:
                 Snowball_Sound_Effect.play()
@@ -120,7 +126,7 @@ class Game():
 
         while self.On_Title_Card:
         #? limits the frame rate to 60
-            dt = self.clock.tick(60) / 1000
+            dt = self.clock.tick(FrameRate) / 1000
             self.screen.fill("#639bff")
     
             # Check if it's time to switch the displayed image
@@ -148,7 +154,7 @@ class Game():
             self.crt_shader() #* or .flip as flip does only a part of the display while .update does the entire display
     
     def pause_menu(self):
-        dt = self.clock.tick(60) / 1000
+        dt = self.clock.tick(FrameRate) / 1000
         while self.Game_Paused:
         
             font = pygame.font.Font("Assets\Fonts\\alagard.ttf", 75)

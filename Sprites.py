@@ -1,18 +1,24 @@
-import pygame
-from pygame.locals import *
 from Settings import *
 
 
-class Player_Character(pygame.sprite.Sprite):
+class Sprite(pygame.sprite.Sprite):
+    def __init__(self,pos,surf,groups):
+        super().__init__(groups)
+        self.image = surf
+        self.rect = self.image.get_frect(topleft = pos)
+
+class Player_Character(Sprite):
     def __init__(self,pos, groups, collision_sprites):
         #? setup player sprite and speed and what not
-        super().__init__(groups)
+        surf = pygame.Surface((40,80))
+        super().__init__(pos, surf,groups)
         self.image = pygame.image.load("Assets\Img\Player\Player_Snowman.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (64,64))
         self.rect =  self.image.get_frect(center = pos)
         self.hitbox = self.rect.inflate(-15,-5)
         self.Player_Direction = pygame.math.Vector2(0,0)
-        
+        self.gravity = 50
+        self.on_floor = False
         #? setup cooldown on snowball launcher
         self.can_shoot = True
         self.snowball_shoot_time = 0
@@ -26,9 +32,10 @@ class Player_Character(pygame.sprite.Sprite):
         #? get the keys that are being pressed 
         Movement_keys = pygame.key.get_pressed()
         self.Player_Direction.x = int(Movement_keys[pygame.K_d] or Movement_keys[pygame.K_RIGHT]) - int(Movement_keys[pygame.K_a] or Movement_keys[pygame.K_LEFT])
-        self.Player_Direction.y = int(Movement_keys[pygame.K_s] or Movement_keys[pygame.K_DOWN]) - int(Movement_keys[pygame.K_w] or Movement_keys[pygame.K_UP] or Movement_keys[pygame.K_SPACE])
-        
-        self.Player_Direction = self.Player_Direction.normalize() if self.Player_Direction else self.Player_Direction #? makes the speed constant when you click 2 buttons at the same time
+        #self.Player_Direction.y = int(Movement_keys[pygame.K_s] or Movement_keys[pygame.K_DOWN]) - int(Movement_keys[pygame.K_w] or Movement_keys[pygame.K_UP] or Movement_keys[pygame.K_SPACE])
+        if (Movement_keys[pygame.K_SPACE] or Movement_keys[pygame.K_w]) and self.on_floor:
+            self.Player_Direction.y = -20
+        #self.Player_Direction = self.Player_Direction.normalize() if self.Player_Direction else self.Player_Direction #? makes the speed constant when you click 2 buttons at the same time
         Shooting_keys = pygame.key.get_just_pressed()
         '''if Shooting_keys[pygame.K_q] and self.can_shoot:
             Snowball(Snowball_Surf, self.rect.midright, (all_sprites, snowball_sprites))
@@ -47,7 +54,9 @@ class Player_Character(pygame.sprite.Sprite):
         
         self.hitbox.x += self.Player_Direction.x * self.Player_Speed * dt
         self.collide('Horizontal')
-        self.hitbox.y += self.Player_Direction.y * self.Player_Speed * dt
+        
+        self.Player_Direction.y += self.gravity * dt
+        self.hitbox.y += self.Player_Direction.y # * self.Player_Speed * dt
         self.collide('Vertical')
         self.rect.center = self.hitbox.center
         
@@ -55,13 +64,24 @@ class Player_Character(pygame.sprite.Sprite):
         for sprite in self.collision:
             if sprite.rect.colliderect(self.hitbox):
                 if direction == 'Horizontal':
-                    if self.Player_Direction.x > 0: self.hitbox.right = sprite.rect.left
-                    elif self.Player_Direction.x < 0: self.hitbox.left = sprite.rect.right
+                    if self.Player_Direction.x > 0: 
+                        self.hitbox.right = sprite.rect.left
+                    elif self.Player_Direction.x < 0: 
+                        self.hitbox.left = sprite.rect.right
                 elif direction == 'Vertical':
                     if self.Player_Direction.y < 0: self.hitbox.top = sprite.rect.bottom
                     elif self.Player_Direction.y > 0: self.hitbox.bottom = sprite.rect.top
+                    self.Player_Direction.y = 0
+                        
+    def check_floor(self):
+
+        bottom_rect = pygame.FRect((0,0),(self.rect.width, 2)).move_to(midtop = self.rect.midbottom)
+        level_rects = [sprite.rect for sprite in self.collision]
+        bottom_rect.collidelist(level_rects)
+        self.on_floor = True if bottom_rect.collidelist(level_rects) >= 0 else False
     
     def update(self, dt):
+        self.check_floor()
         self.input()
         self.move(dt)
         
@@ -82,3 +102,12 @@ class Player_Character(pygame.sprite.Sprite):
         #? destroys itself if it leaves the screen
         if self.rect.right > 1280:
             self.kill()    '''
+
+
+
+class CollisionSprites(pygame.sprite.Sprite):
+    def __init__(self, pos, surf, groups):
+        super().__init__(groups)
+        self.image = surf
+        self.rect = self.image.get_frect(topleft = pos)
+        
