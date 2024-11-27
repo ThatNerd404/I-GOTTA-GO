@@ -53,7 +53,7 @@ class Game():
     def load_assets(self):
          # graphics
          self.snowball_surf = import_image("Assets\Img\Snowball_Projectile.png")
-         self.player_frames = import_folder("Assets\Img\Player")
+         self.snowball_surf = pygame.transform.scale(self.snowball_surf, (16,16))
          # sounds
          pygame.mixer.init()
          pygame.mixer.music.load(Background_Music)
@@ -75,7 +75,8 @@ class Game():
         for obj in map.get_layer_by_name("Entities"):
             if obj.name == 'Player':
                 self.player = Player_Character((obj.x, obj.y), self.all_sprites, self.collision_sprites)
-            
+            elif obj.name == 'Enemy':
+                self.enemy = Enemy((obj.x,obj.y), (self.all_sprites, self.collision_sprites))
     def run(self):
         
         #? Main Game Loop

@@ -110,7 +110,12 @@ class Player_Character(Sprite):
         if self.rect.right > 1280:
             self.kill()    '''
 
-
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self,pos,groups):
+        super().__init__(groups)
+        self.image = pygame.image.load("Assets\Img\Enemy_Flamingo.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image,(64,64))
+        self.rect = self.image.get_frect(topleft = pos)
 
 class CollisionSprites(pygame.sprite.Sprite):
     def __init__(self, pos, surf, groups):
