@@ -33,7 +33,7 @@ class Player_Character(Sprite):
         Movement_keys = pygame.key.get_pressed()
         self.Player_Direction.x = int(Movement_keys[pygame.K_d] or Movement_keys[pygame.K_RIGHT]) - int(Movement_keys[pygame.K_a] or Movement_keys[pygame.K_LEFT])
         #self.Player_Direction.y = int(Movement_keys[pygame.K_s] or Movement_keys[pygame.K_DOWN]) - int(Movement_keys[pygame.K_w] or Movement_keys[pygame.K_UP] or Movement_keys[pygame.K_SPACE])
-        if (Movement_keys[pygame.K_SPACE] or Movement_keys[pygame.K_w]) and self.on_floor:
+        if (Movement_keys[pygame.K_SPACE] or Movement_keys[pygame.K_w] or Movement_keys[pygame.K_UP]) and self.on_floor:
             self.Player_Direction.y = -20
         #self.Player_Direction = self.Player_Direction.normalize() if self.Player_Direction else self.Player_Direction #? makes the speed constant when you click 2 buttons at the same time
         Shooting_keys = pygame.key.get_just_pressed()
@@ -55,6 +55,13 @@ class Player_Character(Sprite):
         self.hitbox.x += self.Player_Direction.x * self.Player_Speed * dt
         self.collide('Horizontal')
         
+        if self.Player_Direction.x == 1:
+            self.image = pygame.image.load("Assets\Img\Player\Player_Snowman.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (64,64))
+        elif self.Player_Direction.x == -1:
+            self.image = pygame.image.load("Assets\Img\Player\Player_Snowman_Backward.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (64,64))
+        
         self.Player_Direction.y += self.gravity * dt
         self.hitbox.y += self.Player_Direction.y # * self.Player_Speed * dt
         self.collide('Vertical')
@@ -72,7 +79,7 @@ class Player_Character(Sprite):
                     if self.Player_Direction.y < 0: self.hitbox.top = sprite.rect.bottom
                     elif self.Player_Direction.y > 0: self.hitbox.bottom = sprite.rect.top
                     self.Player_Direction.y = 0
-                        
+                #! hey if you pause in the air this counter doesnt stop :)        
     def check_floor(self):
 
         bottom_rect = pygame.FRect((0,0),(self.rect.width, 2)).move_to(midtop = self.rect.midbottom)

@@ -7,15 +7,17 @@ from crt_shader import Graphic_engine
 from Settings import *
 from Sprites import *
 from Groups import AllSprites
-
+from Support import *
 
 class Game():
     def __init__(self):
         #? setup pygame
         pygame.init()
         
-        Background_Music.set_volume(10)
-        Background_Music.play(loops= -1) 
+        
+        
+        
+        
         #? Main Loop Variables
         self.On_Title_Card = True
         self.Game_Paused = False
@@ -36,6 +38,7 @@ class Game():
         
         
         #? setting up first level
+        self.load_assets()
         self.setup('Assets\Maps\Level_1.tmx')
         
         #? init shader class
@@ -47,10 +50,14 @@ class Game():
         self.clock = pygame.time.Clock()
         
         #*self.flamingo_sprite = Enemy(Flamingo_Enemy_Surf,(300, 500), (all_sprites, enemy_sprites))
-    def load_assest(self):
+    def load_assets(self):
          # graphics
-         pass
+         self.snowball_surf = import_image("Assets\Img\Snowball_Projectile.png")
+         self.player_frames = import_folder("Assets\Img\Player")
          # sounds
+         pygame.mixer.init()
+         pygame.mixer.music.load(Background_Music)
+         pygame.mixer.music.play()
          
     def setup(self,map_link):
         
@@ -70,6 +77,7 @@ class Game():
                 self.player = Player_Character((obj.x, obj.y), self.all_sprites, self.collision_sprites)
             
     def run(self):
+        
         #? Main Game Loop
         while self.Game_Running:
             
@@ -156,6 +164,7 @@ class Game():
     
     def pause_menu(self):
         dt = self.clock.tick(FrameRate) / 1000
+        pygame.mixer.music.pause()
         while self.Game_Paused:
         
             font = pygame.font.Font("Assets\Fonts\\alagard.ttf", 75)
@@ -173,7 +182,7 @@ class Game():
             #*        elif pygame.key.get_pressed()[pygame.K_1]:
             #*            Crt_On = not Crt_On
             self.crt_shader() #* add this back later when I figure out how to change a variable in another file
-
+        pygame.mixer.music.unpause()
     """Paused_Card = pygame.image.load("Assets\Img\Title_Card1.png").convert_alpha()
     Paused_Card = pygame.transform.scale(Paused_Card,(768,768))
     Paused_Card_rect  = Paused_Card.get_frect(center = (Window_Width / 2, Window_Height / 2))
