@@ -10,6 +10,7 @@ class Sprite(pygame.sprite.Sprite):
 class Player_Character(Sprite):
     def __init__(self,pos, groups, collision_sprites):
         #? setup player sprite and speed and what not
+        
         surf = pygame.Surface((40,80))
         super().__init__(pos, surf,groups)
         self.image = pygame.image.load("Assets\Img\Player\Player_Snowman.png").convert_alpha()
@@ -19,6 +20,8 @@ class Player_Character(Sprite):
         self.Player_Direction = pygame.math.Vector2(0,0)
         self.gravity = 60
         self.on_floor = False
+        #*self.flip = True
+        
         #? setup cooldown on snowball launcher
         self.can_shoot = True
         self.snowball_shoot_time = 0
@@ -56,13 +59,13 @@ class Player_Character(Sprite):
         self.hitbox.x += self.Player_Direction.x * self.Player_Speed * dt
         self.collide('Horizontal')
         
-        if self.Player_Direction.x == 1:
+        '''if self.Player_Direction.x == 1:
             self.image = pygame.image.load("Assets\Img\Player\Player_Snowman.png").convert_alpha()
             self.image = pygame.transform.scale(self.image, (64,64))
         elif self.Player_Direction.x == -1:
             self.image = pygame.image.load("Assets\Img\Player\Player_Snowman_Backward.png").convert_alpha()
             self.image = pygame.transform.scale(self.image, (64,64))
-        
+        '''
         self.Player_Direction.y += self.gravity * dt
         self.hitbox.y += self.Player_Direction.y # * self.Player_Speed * dt
         self.collide('Vertical')
@@ -88,10 +91,18 @@ class Player_Character(Sprite):
         bottom_rect.collidelist(level_rects)
         self.on_floor = True if bottom_rect.collidelist(level_rects) >= 0 else False
     
+    '''def animate(self):
+        if self.Player_Direction.x :
+            self.flip = self.Player_Direction.x < 0
+        else:
+            pass
+        self.image = pygame.transform.flip(self.image, self.flip, False)
+    '''
     def update(self, dt):
         self.check_floor()
         self.input()
         self.move(dt)
+        #*self.animate()
         
     
 '''class Snowball(pygame.sprite.Sprite):
