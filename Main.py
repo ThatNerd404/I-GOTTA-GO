@@ -77,6 +77,7 @@ class Game():
                 self.player = Player_Character((obj.x, obj.y), self.all_sprites, self.collision_sprites)
             elif obj.name == 'Enemy':
                 self.enemy = Enemy((obj.x,obj.y), (self.all_sprites, self.collision_sprites))
+                
     def run(self):
         
         #? Main Game Loop

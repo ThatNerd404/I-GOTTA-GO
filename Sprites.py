@@ -15,9 +15,9 @@ class Player_Character(Sprite):
         self.image = pygame.image.load("Assets\Img\Player\Player_Snowman.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (64,64))
         self.rect =  self.image.get_frect(center = pos)
-        self.hitbox = self.rect.inflate(-15,-5)
+        self.hitbox = self.rect.inflate(-45,-5)
         self.Player_Direction = pygame.math.Vector2(0,0)
-        self.gravity = 50
+        self.gravity = 60
         self.on_floor = False
         #? setup cooldown on snowball launcher
         self.can_shoot = True
@@ -31,9 +31,10 @@ class Player_Character(Sprite):
     
         #? get the keys that are being pressed 
         Movement_keys = pygame.key.get_pressed()
+        jump_key = pygame.key.get_just_pressed()
         self.Player_Direction.x = int(Movement_keys[pygame.K_d] or Movement_keys[pygame.K_RIGHT]) - int(Movement_keys[pygame.K_a] or Movement_keys[pygame.K_LEFT])
         #self.Player_Direction.y = int(Movement_keys[pygame.K_s] or Movement_keys[pygame.K_DOWN]) - int(Movement_keys[pygame.K_w] or Movement_keys[pygame.K_UP] or Movement_keys[pygame.K_SPACE])
-        if (Movement_keys[pygame.K_SPACE] or Movement_keys[pygame.K_w] or Movement_keys[pygame.K_UP]) and self.on_floor:
+        if (jump_key[pygame.K_SPACE] or jump_key[pygame.K_w] or jump_key[pygame.K_UP]) and self.on_floor:
             self.Player_Direction.y = -20
         #self.Player_Direction = self.Player_Direction.normalize() if self.Player_Direction else self.Player_Direction #? makes the speed constant when you click 2 buttons at the same time
         Shooting_keys = pygame.key.get_just_pressed()
@@ -110,9 +111,10 @@ class Player_Character(Sprite):
         if self.rect.right > 1280:
             self.kill()    '''
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(Sprite):
     def __init__(self,pos,groups):
-        super().__init__(groups)
+        surf = pygame.Surface((40,80))
+        super().__init__(pos, surf,groups)
         self.image = pygame.image.load("Assets\Img\Enemy_Flamingo.png").convert_alpha()
         self.image = pygame.transform.scale(self.image,(64,64))
         self.rect = self.image.get_frect(topleft = pos)
